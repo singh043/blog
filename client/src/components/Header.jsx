@@ -7,6 +7,7 @@ import { VscChromeClose } from "react-icons/vsc";
 import { useState } from "react";
 
 export default function Header() {
+  
   const path = useLocation().pathname;
   const [showMobileMenu, setShowMobileMenu] = useState(true);
 
@@ -44,9 +45,9 @@ export default function Header() {
         className="flex items-center justify-center gap-4 md:gap-8 font-semibold
             sm:flex hidden"
       >
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/projects">Projects</Link>
+        <Link to="/" className={`${path === "/" ? "text-green-400" : "text-black"}`} >Home</Link>
+        <Link to="/about" className={`${path === "/about" ? "text-green-400" : "text-black"}`} >About</Link>
+        <Link to="/projects" className={`${path === "/projects" ? "text-green-400" : "text-black"}`} >Projects</Link>
       </div>
       <div className=" flex items-center gap-4 ml-4 sm:ml-0 ">
         <Button icon={<FaMoon size={14} />} onClick={() => {}} className="" />
