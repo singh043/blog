@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function Header() {
   
   const path = useLocation().pathname;
-  const [showMobileMenu, setShowMobileMenu] = useState(true);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   return (
     <nav className=" flex items-center justify-between py-[16px] px-[4%] 
@@ -42,7 +42,7 @@ export default function Header() {
         className=" lg:hidden text-gray-600 "
       />
       <div
-        className="flex items-center justify-center gap-4 md:gap-8 font-semibold
+        className="items-center justify-center gap-4 md:gap-8 font-semibold
             sm:flex hidden"
       >
         <Link to="/" className={`${path === "/" ? "text-green-400" : "text-black"}`} >Home</Link>
@@ -78,21 +78,21 @@ export default function Header() {
             to="/"
             className={`${path === "/" ? "bg-green-400 text-white" : "hover:bg-gray-400" }
                 py-3 px-6`}
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            onClick={() => setShowMobileMenu(false)}
           >
             Home
           </Link>
           <Link
             to="/about"
             className={`${path === "/about" ? "bg-green-400 text-white" : "hover:bg-gray-400" } py-3 px-6`}
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            onClick={() => setShowMobileMenu(false)}
           >
             About
           </Link>
           <Link
             to="/projects"
             className={`${path === "/projects" ? "bg-green-400 text-white" : "hover:bg-gray-400" } py-3 px-6`}
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            onClick={() => setShowMobileMenu(false)}
           >
             Projects
           </Link>

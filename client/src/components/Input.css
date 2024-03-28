@@ -1,0 +1,13 @@
+.error {
+    color: red;
+    display: none;
+}
+
+.input:invalid[focused="true"]{
+    border: 2px solid red;
+    box-shadow: 0 0 10px red;
+}
+
+.input:invalid[focused="true"] ~ .error{
+    display: block;
+}
