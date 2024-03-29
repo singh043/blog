@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Input from "../components/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 export default function SignUp() {
 
@@ -10,13 +11,43 @@ export default function SignUp() {
     password: ""
   })
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formDetails),
+      })
+
+      const data = await res.json();
+      if (data.success === false) {
+        if(data.message === `E11000 duplicate key error collection: blog.users index: username_1 dup key: { username: "${formDetails.username}" }`)
+          setErrorMessage("This username is already in use.");
+        else if(data.message === `E11000 duplicate key error collection: blog.users index: email_1 dup key: { email: "${formDetails.email}" }`)
+          setErrorMessage("This email id is already in use.");
+        else setErrorMessage(data.message);
+      }
+      setLoading(false);
+      if(res.ok) {
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setLoading(false);
+      console.log("false");
+    }
   }
 
   return (
     <div className="min-h-screen flex justify-center items-center select-none">
-      <div className="flex flex-col items-center p-3">
+      <div className="flex flex-col items-center py-10 px-8 box-shadow rounded-lg ">
         <div className="text-center text-3xl font-semibold">
           Create New Account
         </div>
@@ -36,7 +67,7 @@ export default function SignUp() {
             label={"Email"}
             name="email"
             type="email"
-            errorMessage="Email a valid email"
+            errorMessage="Enter a valid email"
             // pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/"
             formDetails={formDetails}
             setFormDetails={setFormDetails}
@@ -53,19 +84,32 @@ export default function SignUp() {
           />
           <button className="w-full h-12 bg-red-500 mt-2 rounded-xl
             bg-gradient-to-r from-indigo-500 via-purple-500
-            to-pink-500
-          ">
-            Submit
+            to-pink-500 border-none outline-none text-white"
+             
+          >
+            { loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <Spinner className="h-7 w-7" />
+                <span>Loading...</span>
+              </div>
+              ) : ("Sign Up") }
           </button>
-          <div className="flex gap-1 justify-center text-md">
-            <span className="text-black">Already have an account?</span>
-            <Link to="/sign-in"
-              className="underline underline-offset-2 text-blue-700"
-            >
-              Sign in
-            </Link>
-          </div>
         </form>
+        <div className="flex gap-1 justify-center text-md mt-5">
+          <span className="text-black">Already have an account?</span>
+          <Link to="/sign-in"
+            className="underline underline-offset-2 text-blue-700"
+          >
+            Sign in
+          </Link>
+        </div>
+        {
+          errorMessage && (
+            <div className="text-center mt-5 bg-red-300 p-2 rounded-md select-text w-[400px] ">
+              {errorMessage}
+            </div>
+          )
+        }
       </div>
     </div>
   )

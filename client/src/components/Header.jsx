@@ -28,7 +28,7 @@ export default function Header() {
             type="text"
             placeholder="Search..."
             className=" w-[250px] h-10 outline-none rounded-md px-3 py-4 border-2 
-                    border-black/25 text-gray-700 "
+                    border-black/60 text-gray-700"
           />
           <AiOutlineSearch
             size={18}

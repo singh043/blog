@@ -15,7 +15,7 @@ const Input = ({ label, pattern, formDetails, setFormDetails, type, name, errorM
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormDetails((prev) => {
-            return { ...prev, [name]: value }
+            return { ...prev, [name]: value.trim() }
         })
     }
 
