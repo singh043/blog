@@ -8,6 +8,12 @@ export default {
   theme: {
     extend: {
       colors: {
+        c0: "#f3f2f0",
+        c1: "#ffffff",
+        c2: "#0a66c2",
+        c3: "#aab8bd",
+        c4: "#e7e7e7",
+        c5: "#673ab7",
         pink: "#da2f68",
         black1: "#04152d",
         black2: "#041226",

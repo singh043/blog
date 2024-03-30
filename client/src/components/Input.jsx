@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unknown-property */
 import PropTypes from "prop-types";
 import { useState } from "react";
 import "./Input.css";
 
-const Input = ({ label, pattern, formDetails, setFormDetails, type, name, errorMessage }) => {   
+const Input = ({ label, pattern, formDetails, setFormDetails, type, name, errorMessage, id }) => {   
     
     const [focused, setFocused] = useState(false);
   
@@ -19,10 +20,24 @@ const Input = ({ label, pattern, formDetails, setFormDetails, type, name, errorM
         })
     }
 
+    const togglePasswordVisibility = () => {
+        const passwordInput = document.getElementById('password');
+        console.log(passwordInput)
+        const showHide = document.getElementById('toggleShowPass');
+        if(passwordInput.type === "password") {
+            passwordInput.type = "text";
+            showHide.innerHTML = "hide";
+        }else {
+            passwordInput.type = "password"
+            showHide.innerHTML = "show"
+        }
+      }
+
     return (
         <div className="relative z-0 flex flex-col gap-1">
             <input 
                 type={type}
+                id={id}
                 name={name}
                 placeholder=""
                 spellCheck={false}
@@ -42,12 +57,18 @@ const Input = ({ label, pattern, formDetails, setFormDetails, type, name, errorM
             >
                 {label}
             </label>
+            { name === "password" && (<span
+              id="toggleShowPass"
+              className='absolute flex items-center justify-center right-2 top-[14px] text-[16px] cursor-pointer text-c2 font-semibold hover:bg-c2/30 p-0.5 px-2 rounded-full'
+              onClick={() => togglePasswordVisibility()}
+            >show</span>) }
             <span className="text-red-600 hidden error">{errorMessage}</span>
         </div>
     )
 }
 
 Input.propTypes = {
+    id: PropTypes.string,
     name: PropTypes.string,
     pattern: PropTypes.string,
     type: PropTypes.string,
