@@ -32,14 +32,12 @@ const Input = ({ label, pattern, formDetails, setFormDetails, type, name, errorM
                 pattern={pattern}
                 // onFocus={() => setFocused(false)}
                 focused={focused.toString()}
-                className="w-full rounded-lg h-14 peer transition pt-6 border-black input"
+                className="input w-full rounded-lg h-14 peer transition pt-4 px-3 border-[2px] border-black/60 focus:outline-2 focus:outline-blue-700"
             />
             <label
                 className={`text-gray-500 absolute left-3 top-3.5 pointer-events-none 
-                    duration-150 transform -translate-y-0 origin-[0]
-                    peer-focus:-translate-y-3 peer-focus:scale-75 text-lg 
-                    peer-focus:text-black
-                    ${formDetails[name].length > 0 ? "-translate-y-[12px] scale-75 text-[#000000]" : "" }
+                    duration-150 transform -translate-y-0 origin-[0] peer-focus:-translate-y-3 peer-focus:scale-75 text-lg peer-focus:text-black
+                    ${formDetails[name].length > 0 ? "-translate-y-[12px] scale-75 text-black/95" : "" }
                 `}
             >
                 {label}

@@ -17,16 +17,16 @@ export default function Header() {
       <Link
         to="/"
         className=" self-center whitespace-nowrap text-2xl font-semibold 
-                    dark:text-white text-red-500  "
+                    dark:text-white text-teal-500"
       >
-        <span className="pl-2 py-1 ">Flick</span>
-        {/* blog */}
+        <span className="pl-2 py-1 text-teal-500 ">Flick&apos;s Blog</span>
       </Link>
       <form>
         <div className="relative hidden lg:flex">
           <input
             type="text"
             placeholder="Search..."
+            spellCheck={false}
             className=" w-[250px] h-10 outline-none rounded-md px-3 py-4 border-2 
                     border-black/60 text-gray-700"
           />

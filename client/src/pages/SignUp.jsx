@@ -41,7 +41,6 @@ export default function SignUp() {
     } catch (error) {
       setErrorMessage(error.message);
       setLoading(false);
-      console.log("false");
     }
   }
 
@@ -82,10 +81,10 @@ export default function SignUp() {
             formDetails={formDetails}
             setFormDetails={setFormDetails}
           />
-          <button className="w-full h-12 bg-red-500 mt-2 rounded-xl
+          <button className={`w-full h-12 bg-red-500 mt-2 rounded-xl
             bg-gradient-to-r from-indigo-500 via-purple-500
-            to-pink-500 border-none outline-none text-white"
-             
+            to-pink-500 border-none outline-none text-white ${loading ? "cursor-not-allowed" : ""}`}
+             disabled={loading}
           >
             { loading ? (
               <div className="flex items-center justify-center gap-2">

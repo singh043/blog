@@ -1,5 +1,5 @@
 export default function Projects() {
   return (
-    <div>Projects</div>
+    <div className="min-h-screen">Projects</div>
   )
 }
