@@ -1,9 +1,11 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
 import Input from "../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
+import { signInStart, signInSuccess, signInFailure, resetError } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 export default function SignIn() {
 
@@ -15,6 +17,10 @@ export default function SignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error: errorMessage } = useSelector(state => state.user);
+
+  useEffect(() => {
+    dispatch(resetError());
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +49,7 @@ export default function SignIn() {
     <div className="min-h-screen flex justify-center items-center select-none">
       <div className="flex flex-col items-center py-10 px-8 box-shadow rounded-lg ">
         <div className="self-start text-3xl font-semibold">
-          Sign In
+          Sign in
         </div>
         <form className="flex flex-col w-[400px] gap-4 mt-5" onSubmit={handleSubmit}>
           <Input 
@@ -76,8 +82,9 @@ export default function SignIn() {
                 <Spinner className="h-7 w-7" />
                 <span>Loading...</span>
               </div>
-              ) : ("Sign In") }
+              ) : <span className="font-semibold text-lg">Sign in</span> }
           </button>
+          <OAuth />
         </form>
         <div className="flex gap-1 justify-center text-md mt-5">
           <span className="text-black">New to Flick&apos;s Blog?</span>

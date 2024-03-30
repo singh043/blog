@@ -1,7 +1,11 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
 import Input from "../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import OAuth from "../components/OAuth";
+import { resetError } from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function SignUp() {
 
@@ -11,9 +15,14 @@ export default function SignUp() {
     password: ""
   })
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    dispatch(resetError());
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,8 +100,9 @@ export default function SignUp() {
                 <Spinner className="h-7 w-7" />
                 <span>Loading...</span>
               </div>
-              ) : ("Sign Up") }
+              ) : <span className="font-semibold text-lg">Sign up</span> }
           </button>
+          <OAuth />
         </form>
         <div className="flex gap-1 justify-center text-md mt-5">
           <span className="text-black">Already have an account?</span>
