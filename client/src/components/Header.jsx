@@ -3,23 +3,27 @@ import Button from "./Button";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
 import { SlMenu } from "react-icons/sl";
-import { VscChromeClose } from "react-icons/vsc";
 import { useState } from "react";
+import { VscChromeClose } from "react-icons/vsc";
+import { useSelector } from 'react-redux';
+import Avatar from "./Avatar";
 
 export default function Header() {
   
   const path = useLocation().pathname;
+  const { currentUser } = useSelector(state => state.user);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showDropDown, setShowDropDown] = useState(false);
 
   return (
-    <nav className=" flex items-center justify-between py-[16px] px-[4%] 
+    <nav className=" flex items-center justify-between px-[4%] h-20
         shadow-md ">
       <Link
         to="/"
         className=" self-center whitespace-nowrap text-2xl font-semibold 
                     dark:text-white text-teal-500"
       >
-        <span className="pl-2 py-1 text-teal-500 ">Flick&apos;s Blog</span>
+        <span className="pl-2 text-teal-500 ">Flick&apos;s Blog</span>
       </Link>
       <form>
         <div className="relative hidden lg:flex">
@@ -50,13 +54,31 @@ export default function Header() {
         <Link to="/projects" className={`${path === "/projects" ? "text-green-400" : "text-black"}`} >Projects</Link>
       </div>
       <div className=" flex items-center gap-4 ml-4 sm:ml-0 ">
-        <Button icon={<FaMoon size={14} />} onClick={() => {}} className="" />
-        <Link to="/sign-in">
-          <Button
-            label="Sign in"
-            className=" w-20 h-10 border-none bg-green-400 text-white rounded-md "
-          />
-        </Link>
+        <Button icon={<FaMoon size={14} />} className="" />
+        {
+          currentUser ? (
+            <div className="relative">
+              <Avatar user={currentUser} size="large" onClick={() => setShowDropDown(!showDropDown)} />
+              {
+                showDropDown && (
+                  <div className="absolute top-12 right-0 rounded-md flex flex-col divide-y-2 box-shadow bg-white w-[200px]">
+                    <span className="px-6 py-2 text-sm">@{currentUser.username}</span>
+                    <span className="px-6 py-2 text-sm font-medium truncate ">{currentUser.email}</span>
+                    <Link to={'/dashboard?tab=profile'} className="px-6 py-2 hover:bg-black/10  cursor-pointer">Profile</Link>
+                    <span className="px-6 py-2 hover:bg-black/10  cursor-pointer">Sign Out</span>
+                  </div>
+                )
+              }
+            </div>
+          ) : (
+            <Link to="/sign-in">
+              <Button
+                label="Sign in"
+                className=" w-20 h-10 border-none bg-green-400 text-white rounded-md "
+              />
+            </Link>
+          )
+        }
         <span
           className="hover:bg-gray-200 rounded-md w-10 h-10 flex items-center 
             justify-center cursor-pointer sm:hidden"
@@ -71,7 +93,7 @@ export default function Header() {
       </div>
       {showMobileMenu && (
         <div
-          className="absolute left-0 top-[73px] flex flex-col w-full bg-white shadow-lg
+          className="absolute left-0 top-[81px] flex flex-col w-full bg-white shadow-lg
             sm:hidden font-semibold"
         >
           <Link
