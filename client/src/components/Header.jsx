@@ -19,10 +19,6 @@ export default function Header() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
 
-  const handleClickAway = () => {
-    setShowDropDown(false);
-  };
-
   const handleSignOut = async () => {
     try {
       const res = await fetch("/api/user/signout", {
@@ -119,10 +115,13 @@ export default function Header() {
             <Avatar
               user={currentUser}
               size="large"
-              onClick={() => setShowDropDown(true)}
+              onClick={() => {
+                setShowDropDown(true);
+                setShowMobileMenu(false);
+              }}
             />
             {showDropDown && (
-              <ClickAwayListener onClickAway={handleClickAway}>
+              <ClickAwayListener onClickAway={() => setShowDropDown(false)}>
                 <div className="absolute top-12 right-0 rounded-md flex flex-col divide-y-2 box-shadow bg-white w-[200px]">
                   <span className="px-6 py-2 text-sm">
                     @{currentUser.username}
@@ -161,7 +160,10 @@ export default function Header() {
         <span
           className="hover:bg-gray-200 rounded-md w-10 h-10 flex items-center 
             justify-center cursor-pointer sm:hidden"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
+          onClick={() => {
+            setShowDropDown(false);
+            setShowMobileMenu(!showMobileMenu);
+          }}
         >
           {!showMobileMenu ? (
             <SlMenu size={18} className="" />
@@ -171,43 +173,45 @@ export default function Header() {
         </span>
       </div>
       {showMobileMenu && (
-        <div
-          className="absolute left-0 top-[81px] flex flex-col w-full bg-white shadow-lg
-            sm:hidden font-semibold"
-        >
-          <Link
-            to="/"
-            className={`${
-              path === "/" ? "bg-green-400 text-white" : "hover:bg-gray-400"
-            }
-                py-3 px-6`}
-            onClick={() => setShowMobileMenu(false)}
+        <ClickAwayListener onClickAway={() => setShowMobileMenu(false)}>
+          <div
+            className="absolute left-0 top-[81px] flex flex-col w-full bg-white shadow-lg
+              sm:hidden font-semibold"
           >
-            Home
-          </Link>
-          <Link
-            to="/about"
-            className={`${
-              path === "/about"
-                ? "bg-green-400 text-white"
-                : "hover:bg-gray-400"
-            } py-3 px-6`}
-            onClick={() => setShowMobileMenu(false)}
-          >
-            About
-          </Link>
-          <Link
-            to="/projects"
-            className={`${
-              path === "/projects"
-                ? "bg-green-400 text-white"
-                : "hover:bg-gray-400"
-            } py-3 px-6`}
-            onClick={() => setShowMobileMenu(false)}
-          >
-            Projects
-          </Link>
-        </div>
+            <Link
+              to="/"
+              className={`${
+                path === "/" ? "bg-green-400 text-white" : "hover:bg-gray-400"
+              }
+                  py-3 px-6`}
+              onClick={() => setShowMobileMenu(false)}
+            >
+              Home
+            </Link>
+            <Link
+              to="/about"
+              className={`${
+                path === "/about"
+                  ? "bg-green-400 text-white"
+                  : "hover:bg-gray-400"
+              } py-3 px-6`}
+              onClick={() => setShowMobileMenu(false)}
+            >
+              About
+            </Link>
+            <Link
+              to="/projects"
+              className={`${
+                path === "/projects"
+                  ? "bg-green-400 text-white"
+                  : "hover:bg-gray-400"
+              } py-3 px-6`}
+              onClick={() => setShowMobileMenu(false)}
+            >
+              Projects
+            </Link>
+          </div>
+        </ClickAwayListener>
       )}
     </nav>
   );
