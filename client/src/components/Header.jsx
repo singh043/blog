@@ -1,23 +1,49 @@
 import { Link, useLocation } from "react-router-dom";
 import Button from "./Button";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
+import { BsMoonStarsFill, BsSunFill } from "react-icons/bs";
 import { SlMenu } from "react-icons/sl";
 import { useState } from "react";
 import { VscChromeClose } from "react-icons/vsc";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import Avatar from "./Avatar";
+import { signOutSuccess } from "../redux/user/userSlice";
+import ClickAwayListener from "react-click-away-listener";
+import { toggleTheme } from "../redux/theme/themeSlice";
 
 export default function Header() {
-  
   const path = useLocation().pathname;
-  const { currentUser } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const { theme } = useSelector((state) => state.theme);
+  const { currentUser } = useSelector((state) => state.user);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
 
+  const handleClickAway = () => {
+    setShowDropDown(false);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signOutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
-    <nav className=" flex items-center justify-between px-[4%] h-20
-        shadow-md ">
+    <nav
+      className=" flex items-center justify-between px-[4%] h-20
+        shadow-md "
+    >
       <Link
         to="/"
         className=" self-center whitespace-nowrap text-2xl font-semibold 
@@ -49,36 +75,89 @@ export default function Header() {
         className="items-center justify-center gap-4 md:gap-8 font-semibold
             sm:flex hidden"
       >
-        <Link to="/" className={`${path === "/" ? "text-green-400" : "text-black"}`} >Home</Link>
-        <Link to="/about" className={`${path === "/about" ? "text-green-400" : "text-black"}`} >About</Link>
-        <Link to="/projects" className={`${path === "/projects" ? "text-green-400" : "text-black"}`} >Projects</Link>
+        <Link
+          to="/"
+          className={`${
+            path === "/" ? "text-green-400" : "text-black dark:text-white"
+          }`}
+        >
+          Home
+        </Link>
+        <Link
+          to="/about"
+          className={`${
+            path === "/about" ? "text-green-400" : "text-black dark:text-white"
+          }`}
+        >
+          About
+        </Link>
+        <Link
+          to="/projects"
+          className={`${
+            path === "/projects"
+              ? "text-green-400"
+              : "text-black dark:text-white"
+          }`}
+        >
+          Projects
+        </Link>
       </div>
       <div className=" flex items-center gap-4 ml-4 sm:ml-0 ">
-        <Button icon={<FaMoon size={14} />} className="" />
-        {
-          currentUser ? (
-            <div className="relative">
-              <Avatar user={currentUser} size="large" onClick={() => setShowDropDown(!showDropDown)} />
-              {
-                showDropDown && (
-                  <div className="absolute top-12 right-0 rounded-md flex flex-col divide-y-2 box-shadow bg-white w-[200px]">
-                    <span className="px-6 py-2 text-sm">@{currentUser.username}</span>
-                    <span className="px-6 py-2 text-sm font-medium truncate ">{currentUser.email}</span>
-                    <Link to={'/dashboard?tab=profile'} className="px-6 py-2 hover:bg-black/10  cursor-pointer">Profile</Link>
-                    <span className="px-6 py-2 hover:bg-black/10  cursor-pointer">Sign Out</span>
-                  </div>
-                )
-              }
-            </div>
-          ) : (
-            <Link to="/sign-in">
-              <Button
-                label="Sign in"
-                className=" w-20 h-10 border-none bg-green-400 text-white rounded-md "
-              />
-            </Link>
-          )
-        }
+        <Button
+          icon={
+            theme === "light" ? (
+              <BsMoonStarsFill size={16} />
+            ) : (
+              <BsSunFill size={18} />
+            )
+          }
+          className=""
+          onClick={() => dispatch(toggleTheme())}
+        />
+        {currentUser ? (
+          <div className="relative">
+            <Avatar
+              user={currentUser}
+              size="large"
+              onClick={() => setShowDropDown(true)}
+            />
+            {showDropDown && (
+              <ClickAwayListener onClickAway={handleClickAway}>
+                <div className="absolute top-12 right-0 rounded-md flex flex-col divide-y-2 box-shadow bg-white w-[200px]">
+                  <span className="px-6 py-2 text-sm">
+                    @{currentUser.username}
+                  </span>
+                  <span className="px-6 py-2 text-sm font-medium truncate ">
+                    {currentUser.email}
+                  </span>
+                  <Link
+                    to={"/dashboard?tab=profile"}
+                    className="px-6 py-2 hover:bg-black/10  cursor-pointer"
+                    onClick={() => setShowDropDown(false)}
+                  >
+                    Profile
+                  </Link>
+                  <span
+                    className="px-6 py-2 hover:bg-black/10  cursor-pointer"
+                    onClick={() => {
+                      setShowDropDown(false);
+                      handleSignOut();
+                    }}
+                  >
+                    Sign Out
+                  </span>
+                </div>
+              </ClickAwayListener>
+            )}
+          </div>
+        ) : (
+          <Link to="/sign-in">
+            <Button
+              label="Sign in"
+              className=" w-20 h-10 border-none bg-green-400 text-white rounded-md "
+            />
+          </Link>
+        )}
         <span
           className="hover:bg-gray-200 rounded-md w-10 h-10 flex items-center 
             justify-center cursor-pointer sm:hidden"
@@ -98,7 +177,9 @@ export default function Header() {
         >
           <Link
             to="/"
-            className={`${path === "/" ? "bg-green-400 text-white" : "hover:bg-gray-400" }
+            className={`${
+              path === "/" ? "bg-green-400 text-white" : "hover:bg-gray-400"
+            }
                 py-3 px-6`}
             onClick={() => setShowMobileMenu(false)}
           >
@@ -106,14 +187,22 @@ export default function Header() {
           </Link>
           <Link
             to="/about"
-            className={`${path === "/about" ? "bg-green-400 text-white" : "hover:bg-gray-400" } py-3 px-6`}
+            className={`${
+              path === "/about"
+                ? "bg-green-400 text-white"
+                : "hover:bg-gray-400"
+            } py-3 px-6`}
             onClick={() => setShowMobileMenu(false)}
           >
             About
           </Link>
           <Link
             to="/projects"
-            className={`${path === "/projects" ? "bg-green-400 text-white" : "hover:bg-gray-400" } py-3 px-6`}
+            className={`${
+              path === "/projects"
+                ? "bg-green-400 text-white"
+                : "hover:bg-gray-400"
+            } py-3 px-6`}
             onClick={() => setShowMobileMenu(false)}
           >
             Projects
