@@ -15,7 +15,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <div className="md:w-[300px] border-r-2 border-black/10 px-2 py-4">
+      <div className="md:min-w-[240px] border-r-2 border-black/10 px-2 py-4">
         <DashSidebar />
       </div>
       {tab === "profile" && <DashProfile />}
