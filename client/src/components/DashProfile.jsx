@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -10,23 +10,27 @@ import {
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { app } from "./../firebase";
+import {
+  updateFailure,
+  updateStart,
+  updateSuccess,
+} from "../redux/user/userSlice";
 
 export default function DashProfile() {
   const { currentUser } = useSelector((state) => state.user);
 
-  const [formData, setFormData] = useState({
-    username: currentUser.username,
-    email: currentUser.email,
-    password: "",
-  });
+  const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
-  const [imageFile, setImageFile] = useState(null);
+  const dispatch = useDispatch();
   const [imageFileUrl, setImageFileUrl] = useState(null);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [imageFileUploadingProgress, setImageFileUploadProgress] =
     useState(null);
 
   const handleChange = (e) => {
+    setUpdateUserSuccess(null);
     const { name, value } = e.target;
     setFormData((prev) => {
       return { ...prev, [name]: value.trim() };
@@ -34,6 +38,7 @@ export default function DashProfile() {
   };
 
   const handleImageChange = (e) => {
+    setUpdateUserSuccess(null);
     const file = e.target.files[0];
 
     var file_type = file.type;
@@ -44,7 +49,6 @@ export default function DashProfile() {
     setImageFileUploadError(null);
 
     if (file && file_type === "image") {
-      setImageFile(file);
       setImageFileUrl(URL.createObjectURL(file));
       uploadImage(e.target.files[0]);
     } else if (file_type !== "image") {
@@ -55,9 +59,32 @@ export default function DashProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (Object.keys(formData).length === 0) {
+      return;
+    }
+    try {
+      dispatch(updateStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(updateFailure(data.message));
+      } else {
+        dispatch(updateSuccess(data));
+        setUpdateUserSuccess("User's profile is updated successfully");
+      }
+    } catch (error) {
+      dispatch(updateFailure(error.message));
+    }
   };
 
   const uploadImage = async (file) => {
+    setImageFileUploading(true);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
@@ -72,14 +99,16 @@ export default function DashProfile() {
       (error) => {
         setImageFileUploadError("Could not upload image");
         setImageFileUploadProgress(null);
-        setImageFile(null);
         setImageFileUrl(null);
+        setImageFileUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileUrl(downloadURL);
+          setFormData({ ...formData, profilePicture: downloadURL });
           setImageFileUploadError(null);
           setImageFileUploadProgress(null);
+          setImageFileUploading(false);
         });
       }
     );
@@ -145,7 +174,7 @@ export default function DashProfile() {
           <input
             type="text"
             name="username"
-            value={formData.username}
+            defaultValue={currentUser.username}
             spellCheck={false}
             onChange={handleChange}
             className="w-full h-10 border-2 border-black/40 rounded-md px-4 py-2 outline-blue-700"
@@ -153,7 +182,7 @@ export default function DashProfile() {
           <input
             type="text"
             name="email"
-            value={formData.email}
+            defaultValue={currentUser.email}
             spellCheck={false}
             onChange={handleChange}
             className="w-full h-10 border-2 border-black/40 rounded-md px-4 py-2 outline-blue-700"
@@ -167,11 +196,19 @@ export default function DashProfile() {
             className="w-full h-10 border-2 border-black/40 rounded-md px-4 py-2 outline-blue-700"
           />
           <button
-            className="border-none outline-none w-full h-10 font-semibold rounded-lg
-            bg-gradient-to-r from-cyan-500 to-purple-500 text-white p-[2px] px-[3px]"
+            className={`border-none outline-none w-full h-10 font-semibold rounded-lg
+            bg-gradient-to-r from-cyan-500 to-purple-500 text-white p-[2px] px-[3px] ${
+              imageFileUploading ? "cursor-not-allowed" : ""
+            }`}
             type="submit"
           >
-            <div className="w-full h-full rounded-md bg-white hover:bg-transparent hover:text-white text-black flex items-center justify-center">
+            <div
+              className={`w-full h-full rounded-md bg-white text-black flex items-center justify-center ${
+                imageFileUploading
+                  ? ""
+                  : "hover:bg-transparent hover:text-white"
+              } `}
+            >
               Update
             </div>
           </button>
@@ -180,6 +217,11 @@ export default function DashProfile() {
           <span className="cursor-pointer">Delete Account</span>
           <span className="cursor-pointer">Sign out</span>
         </div>
+        {updateUserSuccess && (
+          <div className="text-center mt-5 bg-[#def7ec] p-2 rounded-md select-text max-w-lg w-full">
+            {updateUserSuccess}
+          </div>
+        )}
       </div>
     </div>
   );
