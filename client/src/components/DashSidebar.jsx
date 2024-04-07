@@ -1,16 +1,35 @@
 import { useEffect, useState } from "react";
 import { HiArrowSmRight, HiUser } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";
+import { signOutSuccess } from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function DashSidebar() {
   const location = useLocation();
   const [tab, setTab] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");
     setTab(tabFromUrl);
   }, [location.search]);
+
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signOutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2 text-[16.5px] text-black">
@@ -29,7 +48,10 @@ export default function DashSidebar() {
           User
         </label>
       </Link>
-      <div className="flex gap-3 items-center p-2 rounded-lg h-11 hover:bg-black/5 cursor-pointer">
+      <div
+        className="flex gap-3 items-center p-2 rounded-lg h-11 hover:bg-black/5 cursor-pointer"
+        onClick={handleSignOut}
+      >
         <HiArrowSmRight size={26} className="text-black/30" />
         <span>Sign out</span>
       </div>

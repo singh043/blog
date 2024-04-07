@@ -17,6 +17,7 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signOutSuccess,
 } from "../redux/user/userSlice";
 import DeletePopup from "./DeletePopup";
 
@@ -40,6 +41,22 @@ export default function DashProfile() {
     setFormData((prev) => {
       return { ...prev, [name]: value.trim() };
     });
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signOutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -240,7 +257,9 @@ export default function DashProfile() {
           <span className="cursor-pointer" onClick={() => setShowModal(true)}>
             Delete Account
           </span>
-          <span className="cursor-pointer">Sign out</span>
+          <span className="cursor-pointer" onClick={handleSignOut}>
+            Sign out
+          </span>
         </div>
         {updateUserSuccess && (
           <div className="text-center mt-5 bg-[#def7ec] p-2 rounded-md select-text max-w-lg w-full">
