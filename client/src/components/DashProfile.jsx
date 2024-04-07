@@ -14,7 +14,11 @@ import {
   updateFailure,
   updateStart,
   updateSuccess,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
 } from "../redux/user/userSlice";
+import DeletePopup from "./DeletePopup";
 
 export default function DashProfile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -22,6 +26,7 @@ export default function DashProfile() {
   const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
@@ -80,6 +85,24 @@ export default function DashProfile() {
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    setShowModal(false);
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(deleteUserFailure(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
     }
   };
 
@@ -214,13 +237,21 @@ export default function DashProfile() {
           </button>
         </form>
         <div className="mt-5 flex justify-between text-red-500 font-semibold">
-          <span className="cursor-pointer">Delete Account</span>
+          <span className="cursor-pointer" onClick={() => setShowModal(true)}>
+            Delete Account
+          </span>
           <span className="cursor-pointer">Sign out</span>
         </div>
         {updateUserSuccess && (
           <div className="text-center mt-5 bg-[#def7ec] p-2 rounded-md select-text max-w-lg w-full">
             {updateUserSuccess}
           </div>
+        )}
+        {showModal && (
+          <DeletePopup
+            setShowModal={setShowModal}
+            handleDeleteUser={handleDeleteUser}
+          />
         )}
       </div>
     </div>
