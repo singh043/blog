@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Avatar from "./Avatar";
 import { signOutSuccess } from "../redux/user/userSlice";
 import ClickAwayListener from "react-click-away-listener";
-import { toggleTheme } from "../redux/theme/themeSlice";
+// import { toggleTheme } from "../redux/theme/themeSlice";
 
 export default function Header() {
   const path = useLocation().pathname;
@@ -47,12 +47,13 @@ export default function Header() {
       >
         <span className="pl-2 text-teal-500 ">Flick&apos;s Blog</span>
       </Link>
-      <form>
+      <form onSubmit={() => {}}>
         <div className="relative hidden lg:flex">
           <input
             type="text"
             placeholder="Search..."
             spellCheck={false}
+            onChange={() => {}}
             className=" w-[250px] h-10 outline-none rounded-md px-3 py-4 border-2 
                     border-black/60 text-gray-700"
           />
@@ -69,7 +70,7 @@ export default function Header() {
       />
       <div
         className="items-center justify-center gap-4 md:gap-8 font-semibold
-            sm:flex hidden"
+          sm:flex hidden"
       >
         <Link
           to="/"
@@ -108,7 +109,7 @@ export default function Header() {
             )
           }
           className=""
-          onClick={() => dispatch(toggleTheme())}
+          // onClick={() => dispatch(toggleTheme())}
         />
         {currentUser ? (
           <div className="relative">
