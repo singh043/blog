@@ -13,3 +13,16 @@
     -webkit-backdrop-filter: blur(4px);
     border-radius: 10px;
 }
+
+.error {
+    color: red;
+    display: none;
+}
+
+.input:invalid[focused="true"]{
+    border: 2px solid red;
+}
+
+.input:invalid[focused="true"] ~ .error{
+    display: block;
+}

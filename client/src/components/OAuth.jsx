@@ -8,10 +8,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function OAuth() {
 
-    const path = useLocation().pathname;
     const auth = getAuth(app);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const path = useLocation().pathname;
 
     const signInWithGoogle = async () => {
         const provider = new GoogleAuthProvider();
