@@ -201,7 +201,7 @@ export default function DashProfile() {
               className={`w-full h-full rounded-full object-cover border-4 border-[lightgray]
               ${
                 imageFileUploadingProgress &&
-                imageFileUploadingProgress < 100 &&
+                imageFileUploadingProgress <= 100 &&
                 "opacity-60"
               }`}
             />
@@ -242,9 +242,7 @@ export default function DashProfile() {
             }`}
             type="submit"
           >
-            <div
-              className="w-full h-full rounded-md bg-white text-black flex items-center justify-center hover:bg-transparent hover:text-white"
-            >
+            <div className="w-full h-full rounded-md bg-white text-black flex items-center justify-center hover:bg-transparent hover:text-white">
               Update
             </div>
           </button>
