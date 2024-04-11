@@ -2,7 +2,6 @@
 /* eslint-disable react/no-unknown-property */
 import PropTypes from "prop-types";
 import { useState } from "react";
-import "./Input.css";
 
 const Input = ({
   label,
