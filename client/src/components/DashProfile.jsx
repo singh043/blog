@@ -243,11 +243,7 @@ export default function DashProfile() {
             type="submit"
           >
             <div
-              className={`w-full h-full rounded-md bg-white text-black flex items-center justify-center ${
-                imageFileUploading
-                  ? ""
-                  : "hover:bg-transparent hover:text-white"
-              } `}
+              className="w-full h-full rounded-md bg-white text-black flex items-center justify-center hover:bg-transparent hover:text-white"
             >
               Update
             </div>
