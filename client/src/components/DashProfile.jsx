@@ -20,9 +20,11 @@ import {
   signOutSuccess,
 } from "../redux/user/userSlice";
 import DeletePopup from "./DeletePopup";
+import Spinner from "./Spinner";
+import { Link } from "react-router-dom";
 
 export default function DashProfile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
@@ -238,14 +240,32 @@ export default function DashProfile() {
           <button
             className={`border-none outline-none w-full h-10 font-semibold rounded-lg
             bg-gradient-to-r from-cyan-500 to-purple-500 text-white p-[2px] px-[3px] ${
-              imageFileUploading ? "cursor-not-allowed" : ""
+              imageFileUploading || loading ? "cursor-not-allowed" : ""
             }`}
             type="submit"
           >
             <div className="w-full h-full rounded-md bg-white text-black flex items-center justify-center hover:bg-transparent hover:text-white">
-              Update
+              {imageFileUploading || loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <Spinner className="h-7 w-7" />
+                  <span>Loading...</span>
+                </div>
+              ) : (
+                "Update"
+              )}
             </div>
           </button>
+          {currentUser.isAdmin && (
+            <Link
+              to={"/create-post"}
+              className="border-none outline-none w-full h-10 font-semibold rounded-lg
+              bg-gradient-to-r from-cyan-500 to-purple-500 text-white"
+            >
+              <span className="w-full h-full rounded-md flex items-center justify-center">
+                Create a Post
+              </span>
+            </Link>
+          )}
         </form>
         <div className="mt-5 flex justify-between text-red-500 font-semibold">
           <span className="cursor-pointer" onClick={() => setShowModal(true)}>
