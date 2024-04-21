@@ -100,7 +100,7 @@ const CreatePost = () => {
                     />
                     <ClickAwayListener onClickAway={() => setOpen(false)} >
                         <div
-                            className={`rounded-md h-11 outline-none border-2 border-black/40 bg-gray-100 z-10 text-black cursor-pointer ${ selectedOption ? "border-blue-700" : ""}`}
+                            className={`rounded-md h-11 outline-none border-2 border-black/40 bg-gray-100 z-50 text-black cursor-pointer ${ selectedOption ? "border-blue-700" : ""}`}
                             onClick={() => setOpen(!open)}
                         >
                             <div className={`flex justify-between gap-2 pl-4 pr-2 pt-2 h-full rounded-md`}>

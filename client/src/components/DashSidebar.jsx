@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { HiArrowSmRight, HiUser } from "react-icons/hi";
+import { HiArrowSmRight, HiUser, HiDocumentText } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function DashSidebar() {
   const location = useLocation();
   const [tab, setTab] = useState("");
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -36,7 +37,7 @@ export default function DashSidebar() {
       <Link
         to="/dashboard?tab=profile"
         className={`flex relative gap-3 items-center p-2 rounded-lg h-11 ${
-          tab === "profile" ? "bg-black/5" : ""
+          tab === "profile" ? "bg-black/5" : "hover:bg-black/5"
         } `}
       >
         <HiUser size={26} />
@@ -45,9 +46,19 @@ export default function DashSidebar() {
           className="absolute right-2 bg-[#4b5563] rounded-md text-white text-[13px] 
                 font-semibold px-2 py-[1px] "
         >
-          User
+          { currentUser?.isAdmin ? "Admin" : "User" }
         </label>
       </Link>
+      {
+        currentUser?.isAdmin && (
+          <Link to='/dashboard?tab=posts' className={`flex relative gap-3 items-center p-2 rounded-lg h-11 ${
+              tab === "posts" ? "bg-black/5" : "hover:bg-black/5"
+            } `}>
+            <HiDocumentText size={26} />
+            <span>Posts</span>
+          </Link>
+        )
+      }
       <div
         className="flex gap-3 items-center p-2 rounded-lg h-11 hover:bg-black/5 cursor-pointer"
         onClick={handleSignOut}

@@ -123,7 +123,7 @@ export default function Header() {
             />
             {showDropDown && (
               <ClickAwayListener onClickAway={() => setShowDropDown(false)}>
-                <div className="absolute top-12 right-0 rounded-md flex flex-col divide-y-2 box-shadow bg-white w-[200px] z-10">
+                <div className="absolute top-12 right-0 rounded-md flex flex-col divide-y-2 box-shadow bg-white w-[200px] z-[999]">
                   <span className="px-6 py-2 text-sm">
                     @{currentUser.username}
                   </span>
@@ -177,7 +177,7 @@ export default function Header() {
         <ClickAwayListener onClickAway={() => setShowMobileMenu(false)}>
           <div
             className="absolute left-0 top-[81px] flex flex-col w-full bg-white shadow-lg
-              sm:hidden font-semibold z-10"
+              sm:hidden font-semibold z-50"
           >
             <Link
               to="/"
