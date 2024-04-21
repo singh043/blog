@@ -54,7 +54,7 @@ export default function Header() {
             placeholder="Search..."
             spellCheck={false}
             onChange={() => {}}
-            className=" w-[250px] h-10 outline-none rounded-md px-3 py-4 border-2 
+            className=" w-[230px] h-10 outline-blue-700 textsm rounded-md px-3 py-4 border-2 
                     border-black/60 text-gray-700"
           />
           <AiOutlineSearch
