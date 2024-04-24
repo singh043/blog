@@ -216,7 +216,7 @@ const CreatePost = () => {
                         setFormData({...formData, content: value})
                     }}
                 />
-                <button type="submit" className="border-none outline-none w-full h-10 font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white">Publish</button>
+                <button type="submit" className={`border-none outline-none w-full h-10 font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white ${imageUploadProgress && "cursor-not-allowed"} `} disabled={imageUploadProgress} >Publish</button>
                 {
                     publishError && <div className="text-center mt-5 bg-red-300 p-2 rounded-md select-text w-full">
                         {publishError}

@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 
 const DashPosts = () => {
 
-    const { currentUser } = useSelector((state) => state.user);
     const [userPosts, setUserPosts] = useState([]);
+    const [showMore, setShowMore] = useState(true);
+    const { currentUser } = useSelector((state) => state.user);
 
     console.log(userPosts);
 
@@ -16,6 +17,9 @@ const DashPosts = () => {
                 const data = await res.json();
                 if (res.ok) {
                     setUserPosts(data.posts);
+                    if(data.length < 9) {
+                        setShowMore(false);
+                    }
                 }
             } catch (error) {
                 console.log(error);
@@ -26,6 +30,22 @@ const DashPosts = () => {
         }
     //eslint-disable-next-line
     }, [currentUser._id])
+ 
+    const handleShowMore = async () => {
+        const startIndex = userPosts.length;
+        try {
+            const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`)
+            const data = await res.json();
+            if(res.ok) {
+                setUserPosts((prev) => [...prev, ...data.posts])
+                if(data.posts.length < 9){
+                    setShowMore(false);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <div className="overflow-x-scroll md:mx-auto p-3 w-full">
@@ -35,33 +55,37 @@ const DashPosts = () => {
                         <table className="w-full">
                             <thead className="bg-gray-50 border-b-2 border-gray-200 font-semibold text-md">
                                 <tr>
-                                    <th className="p-3 font-semibold tracking-wide text-left whitespace-nowrap w-32">Date updated</th>
-                                    <th className="p-3 font-semibold tracking-wide text-left whitespace-nowrap w-32">Post image</th>
-                                    <th className="p-3 font-semibold tracking-wide text-left">Post title</th>
-                                    <th className="p-3 font-semibold tracking-wide text-left w-36">Category</th>
-                                    <th className="p-3 font-semibold tracking-wide text-left w-32">Delete</th>
-                                    <th className="p-3 font-semibold tracking-wide text-left w-32">Edit</th>
+                                    <th className="border-r-[1px] text-center p-3 font-semibold tracking-wide whitespace-nowrap w-32">Date updated</th>
+                                    <th className="border-r-[1px] text-center p-3 font-semibold tracking-wide whitespace-nowrap w-32">Post image</th>
+                                    <th className="border-r-[1px] text-center p-3 font-semibold tracking-wide">Post title</th>
+                                    <th className="border-r-[1px] text-center p-3 font-semibold tracking-wide w-36">Category</th>
+                                    <th className="border-r-[1px] text-center p-3 font-semibold tracking-wide w-32">Delete</th>
+                                    <th className="border-r-[1px] text-center p-3 font-semibold tracking-wide w-32">Edit</th>
                                 </tr>
                             </thead>
                             {userPosts.map((post) => (
-                                <tbody key={post._id} className="text-gray-500">
+                                <tbody key={post._id} className="text-gray-500 text-center">
                                     <tr className="border-b-[1px]">
-                                        <td className="p-3 text-sm whitespace-nowrap text-gray-500">{new Date(post.updatedAt).toLocaleDateString()}</td>
-                                        <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                                        <td className="border-r-[1px] p-3 text-sm whitespace-nowrap text-gray-500">{new Date(post.updatedAt).toLocaleDateString()}</td>
+                                        <td className="border-r-[1px] p-3 text-sm text-gray-700 whitespace-nowrap">
                                             <Link to={`/post/${post.slug}`}>
                                                 <img src={post.image} alt={post.title} 
                                                     className="w-24 h-12 object-cover rounded-sm" 
                                                 />
                                             </Link>
                                         </td>
-                                        <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                                        <td className="border-r-[1px] p-3 text-sm text-gray-700 whitespace-nowrap text-left">
                                             <Link to={`/post/${post.slug}`}
                                                 className="font-medium text-gray-900 dark:text-white"
                                             >{post.title}</Link>
                                         </td>
-                                        <td className="p-3 text-sm text-gray-700 whitespace-nowrap">{post.category}</td>
-                                        <td className="p-3 text-sm text-gray-700 whitespace-nowrap"><span className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span></td>
-                                        <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                                        <td className="border-r-[1px] p-3 text-sm text-gray-700">
+                                            <div className="rounded-lg bg-opacity-40 py-1 px-1.5 text-sm font-medium tracking-wider text-teal-500 bg-green-200">
+                                                {post.category}
+                                            </div>
+                                        </td>
+                                        <td className="border-r-[1px] p-3 text-sm text-gray-700 whitespace-nowrap"><span className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span></td>
+                                        <td className="border-r-[1px] p-3 text-sm text-gray-700 whitespace-nowrap">
                                             <Link to={`/update-post/${post._id}`} 
                                                 className="text-teal-500 hover:underline">
                                                 <span>Edit</span>
@@ -75,7 +99,7 @@ const DashPosts = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
                     {
                         userPosts.map((post) => (
-                                <div className="bg-white p-4 rounded-lg shadow space-y-3">
+                                <div className="bg-white p-4 rounded-lg shadow space-y-3" key={post._id}>
                                     <div className="flex items-center space-x-2 justify-between text-sm">
                                         <div className="text-gray-500">{new Date(post.updatedAt).toLocaleDateString()}</div>
                                         <div className="rounded-lg bg-opacity-40 py-1 px-1.5 text-sm font-medium tracking-wider text-teal-500 bg-green-200">{post.category}</div>
@@ -84,7 +108,7 @@ const DashPosts = () => {
                                     <div>
                                         <Link to={`/post/${post.slug}`}>
                                             <img src={post.image} alt={post.title} 
-                                                className="w-full h-auto object-cover rounded-md" 
+                                                className="w-full h-48 object-cover rounded-md" 
                                             />
                                         </Link>
                                     </div>
@@ -96,6 +120,16 @@ const DashPosts = () => {
                         ))
                     }
                     </div>
+                    {
+                        showMore && (
+                            <button className="w-full text-teal-500 self-center text-sm py-7
+                                cursor-pointer"
+                                onClick={handleShowMore}
+                            >
+                                Show more
+                            </button>
+                        )
+                    }
                 </>
             ) : <p>You have no posts yet</p>}
         </div>
