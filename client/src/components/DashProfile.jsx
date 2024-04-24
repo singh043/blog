@@ -280,12 +280,7 @@ export default function DashProfile() {
             {updateUserSuccess}
           </div>
         )}
-        {showModal && (
-          <DeletePopup
-            setShowModal={setShowModal}
-            handleDeleteUser={handleDeleteUser}
-          />
-        )}
+        c
       </div>
     </div>
   );

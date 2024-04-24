@@ -12,7 +12,7 @@ const DeletePopup = (props) => {
           <div className="flex items-center justify-center gap-3">
             <RiErrorWarningLine size={24} className="text-red-500" />
             <div className="text-lg">
-              Are you sure, you want to delete this account?
+              { props.title ? props.title : "Are you sure, you want to delete this account?"}
             </div>
           </div>
           <div className="flex items-center justify-center gap-4 mt-5">
