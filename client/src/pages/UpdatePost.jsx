@@ -1,23 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { VscChromeClose } from "react-icons/vsc";
 import ClickAwayListener from "react-click-away-listener";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { app } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { useSelector } from 'react-redux';
 
-const CreatePost = () => {
+const UpdatePost = () => {
 
     const navigate = useNavigate();
+    const { postId } = useParams();
     const [file, setFile] = useState(null);
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({});
     const [publishError, setPublishError] = useState(null);
     const [selectedOption, setSelectedOption] = useState(null);
+    const { currentUser } = useSelector((state) => state.user);
     const [imageUploadError, setImageUploadError] = useState(false);
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
+
+    useEffect(() => {
+        try {
+          const fetchPost = async () => {
+            const res = await fetch(`/api/post/getposts?postId=${postId}`);
+            const data = await res.json();
+            if (!res.ok) {
+              console.log(data.message);
+              setPublishError(data.message);
+              return;
+            }
+            if (res.ok) {
+              setPublishError(null);
+              if(data.posts[0].category.toLowerCase() !== 'uncategorized') {
+                setSelectedOption(data.posts[0].category)
+              }
+              setFormData(data.posts[0]);
+            }
+          };
+    
+          fetchPost();
+        } catch (error) {
+          console.log(error.message);
+        }
+    }, [postId]);
 
     const handleUploadImage = async () => {
         try {
@@ -60,8 +88,8 @@ const CreatePost = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-           const res = await fetch('/api/post/create', {
-            method: 'POST',
+           const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -87,7 +115,7 @@ const CreatePost = () => {
 
     return (
         <div className="min-h-screen max-w-3xl mx-auto p-3">
-            <h1 className="text-center font-semibold text-3xl my-7">Create Post</h1>
+            <h1 className="text-center font-semibold text-3xl my-7">Update Post</h1>
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 <div className="flex flex-col sm:flex-row gap-4 justify-between">
                     <input
@@ -97,6 +125,7 @@ const CreatePost = () => {
                         placeholder="Title"
                         className="flex-1 rounded-md px-4 py-2 h-11 outline-none border-2 border-black/40 bg-gray-100"
                         onChange={(e) => setFormData({...formData, title: e.target.value})}
+                        value={formData?.title}
                     />
                     <ClickAwayListener onClickAway={() => setOpen(false)} >
                         <div
@@ -204,9 +233,9 @@ const CreatePost = () => {
                         </div>
                     )
                 }
-                {formData.image && (
+                {formData?.image && (
                     <img 
-                        src={formData.image}
+                        src={formData?.image}
                         alt="upload"
                         className="w-full h-72 object-cover"
                     />
@@ -215,8 +244,9 @@ const CreatePost = () => {
                     onChange={(value) => {
                         setFormData({...formData, content: value})
                     }}
+                    value={formData?.content}
                 />
-                <button type="submit" className={`border-none outline-none w-full h-10 font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white ${imageUploadProgress && "cursor-not-allowed"} `} disabled={imageUploadProgress} >Publish</button>
+                <button type="submit" className={`border-none outline-none w-full h-10 font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white ${imageUploadProgress && "cursor-not-allowed"} `} disabled={imageUploadProgress} >Update post</button>
                 {
                     publishError && <div className="text-center mt-5 bg-red-300 p-2 rounded-md select-text w-full">
                         {publishError}
@@ -227,4 +257,4 @@ const CreatePost = () => {
     );
 };
 
-export default CreatePost;
+export default UpdatePost;
