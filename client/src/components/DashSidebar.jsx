@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { HiArrowSmRight, HiUser, HiDocumentText } from "react-icons/hi";
+import { FaUsers } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import { signOutSuccess } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { signOutSuccess } from "../redux/user/userSlice";
+import { HiArrowSmRight, HiUser, HiDocumentText } from "react-icons/hi";
 
 export default function DashSidebar() {
   const location = useLocation();
@@ -33,11 +34,11 @@ export default function DashSidebar() {
   };
 
   return (
-    <div className="flex flex-col gap-2 text-[16.5px] text-black">
+    <div className="flex flex-col gap-2 text-[16.5px] text-black/60">
       <Link
         to="/dashboard?tab=profile"
         className={`flex relative gap-3 items-center p-2 rounded-lg h-11 ${
-          tab === "profile" ? "bg-black/5" : "hover:bg-black/5"
+          tab === "profile" ? "bg-black/5 text-black" : "hover:bg-black/5"
         } `}
       >
         <HiUser size={26} />
@@ -51,19 +52,27 @@ export default function DashSidebar() {
       </Link>
       {
         currentUser?.isAdmin && (
-          <Link to='/dashboard?tab=posts' className={`flex relative gap-3 items-center p-2 rounded-lg h-11 ${
-              tab === "posts" ? "bg-black/5" : "hover:bg-black/5"
-            } `}>
-            <HiDocumentText size={26} />
-            <span>Posts</span>
-          </Link>
+          <>
+            <Link to='/dashboard?tab=users' className={`flex relative gap-3 items-center p-2 rounded-lg h-11 ${
+                tab === "users" ? "bg-black/5 text-black" : "hover:bg-black/5"
+              } `}>
+              <FaUsers  size={26} />
+              <span>Users</span>
+            </Link>
+            <Link to='/dashboard?tab=posts' className={`flex relative gap-3 items-center p-2 rounded-lg h-11 ${
+                tab === "posts" ? "bg-black/5 text-black" : "hover:bg-black/5"
+              } `}>
+              <HiDocumentText size={26} />
+              <span>Posts</span>
+            </Link>
+          </>
         )
       }
       <div
         className="flex gap-3 items-center p-2 rounded-lg h-11 hover:bg-black/5 cursor-pointer"
         onClick={handleSignOut}
       >
-        <HiArrowSmRight size={26} className="text-black/30" />
+        <HiArrowSmRight size={26} className="" />
         <span>Sign out</span>
       </div>
     </div>

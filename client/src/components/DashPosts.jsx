@@ -68,7 +68,7 @@ const DashPosts = () => {
     }
 
     return (
-        <div className="overflow-x-scroll md:mx-auto p-3 w-full">
+        <div className="overflow-auto md:mx-auto p-3 w-full">
             {currentUser.isAdmin && userPosts.length > 0 ? (
                 <>
                     <div className="rounded-lg shadow overflow-auto hidden md:block scrollbar-thin">
@@ -111,7 +111,7 @@ const DashPosts = () => {
                                             >{post.title}</Link>
                                         </td>
                                         <td className="border-r-[1px] p-3 text-sm text-gray-700">
-                                            <div className="rounded-lg bg-opacity-40 py-1 px-1.5 
+                                            <div className="rounded-[6px] bg-opacity-40 py-1 px-1.5 
                                                 text-sm font-medium tracking-wider text-teal-500 bg-green-200">
                                                 {post.category}
                                             </div>
