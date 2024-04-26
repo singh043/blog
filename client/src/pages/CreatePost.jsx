@@ -45,8 +45,8 @@ const CreatePost = () => {
                 },
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        setImageUploadProgress(null);
                         setImageUploadError(null);
+                        setImageUploadProgress(null);
                         setFormData({...formData, image: downloadURL})
                     })
                 }
