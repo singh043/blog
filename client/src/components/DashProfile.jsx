@@ -280,7 +280,6 @@ export default function DashProfile() {
             {updateUserSuccess}
           </div>
         )}
-        c
       </div>
     </div>
   );
