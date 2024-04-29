@@ -4,7 +4,6 @@ const Spinner = ({className}) => {
     <div className={`${className}`}>
         <img 
             src="/loader.svg"
-            className="h-12 w-12"
         />
     </div>
   )

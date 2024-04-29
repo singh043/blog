@@ -1,12 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import CallToAction from '../components/CallToAction';
+import CommentSection from '../components/CommentSection';
 
 const PostPage = () => {
     const { postSlug } = useParams();
     const [loading, setLoading] = useState(true);
-    //eslint-diasble-next-line
     const [error, setError] = useState(false);
     const [post, setPost] = useState(null);
 
@@ -34,7 +35,9 @@ const PostPage = () => {
     }, [postSlug])
 
     if (loading) return (
-        <Spinner className="min-h-screen w-full flex justify-center items-center" />
+        <div className="min-h-screen w-full flex justify-center items-center">
+            <Spinner className="h-12 w-12" />
+        </div>
     )
 
     return (
@@ -56,6 +59,7 @@ const PostPage = () => {
                 mx-auto w-full post-content'>
             </div>
             <div className="max-w-4xl mx-auto w-full"><CallToAction /> </div>
+            <CommentSection postId={post._id} />
         </main>
     )
 }

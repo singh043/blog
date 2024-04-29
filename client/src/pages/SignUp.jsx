@@ -114,7 +114,7 @@ export default function SignUp() {
         </div>
         {
           errorMessage && (
-            <div className="text-center mt-5 bg-red-300 p-2 rounded-md select-text w-[400px] ">
+            <div className="text-center mt-5 bg-red-300 p-2 rounded-md select-text w-[400px]">
               {errorMessage}
             </div>
           )
