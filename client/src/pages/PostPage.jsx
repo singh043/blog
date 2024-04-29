@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
+import CallToAction from '../components/CallToAction';
 
 const PostPage = () => {
     const { postSlug } = useParams();
@@ -35,7 +36,7 @@ const PostPage = () => {
     if (loading) return (
         <Spinner className="min-h-screen w-full flex justify-center items-center" />
     )
-    
+
     return (
         <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen text-black'>
             <h1 className="text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">
@@ -53,8 +54,8 @@ const PostPage = () => {
             </div>
             <div dangerouslySetInnerHTML={{__html: post && post.content}} className='p-3 max-w-2xl 
                 mx-auto w-full post-content'>
-
             </div>
+            <div className="max-w-4xl mx-auto w-full"><CallToAction /> </div>
         </main>
     )
 }
