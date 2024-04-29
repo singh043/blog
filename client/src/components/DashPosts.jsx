@@ -193,7 +193,7 @@ const DashPosts = () => {
                         <DeletePopup
                             setShowModal={setShowModal}
                             title="Are you sure, you want to delete this post?"
-                            handleDeleteUser={handleDeletePost}
+                            handleDelete={handleDeletePost}
                         />
                     )}
                 </>

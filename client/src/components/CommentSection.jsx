@@ -3,12 +3,15 @@ import Comment from './Comment';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import DeletePopup from './DeletePopup';
 
 const CommentSection = ({ postId }) => {
 
     const navigate = useNavigate();
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [commentToDelete, setCommentToDelete] = useState(null);
     const [commentError, setCommentError] = useState(null)
     const { currentUser } = useSelector((state) => state.user);
 
@@ -89,6 +92,25 @@ const CommentSection = ({ postId }) => {
             console.log(error.message)
         }
     }
+
+    const handleDeleteComment = async (commentId) => {
+        setShowModal(false);
+        try {
+            if (!currentUser) {
+                navigate('sign-in')
+                return;
+            }
+            const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
+                method: 'DELETE',
+            });
+
+            if(res.ok) {
+                const data = await res.json();
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
     
     return (
         <div className='max-w-2xl mx-auto w-full p-3'>
@@ -151,12 +173,22 @@ const CommentSection = ({ postId }) => {
                         </div>
                         {
                             comments.map((comment) => (
-                                <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={handleEditComment} />
+                                <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={handleEditComment} onDelete={(commentId) => {
+                                    setShowModal(true);
+                                    setCommentToDelete(commentId);
+                                }} />
                             ))
                         }
                     </>
                 )
             }
+            {showModal && (
+                <DeletePopup
+                    setShowModal={setShowModal}
+                    title="Are you sure, you want to delete this comment?"
+                    handleDelete={() => handleDeleteComment(commentToDelete)}
+                />
+            )}
         </div>
     )
 }

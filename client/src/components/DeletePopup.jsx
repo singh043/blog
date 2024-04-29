@@ -17,7 +17,7 @@ const DeletePopup = (props) => {
           </div>
           <div className="flex items-center justify-center gap-4 mt-5">
             <button
-              onClick={props.handleDeleteUser}
+              onClick={props.handleDelete}
               className="border-[2px] border-red-700 py-2 px-4
                     text-sm rounded-md text-red-500 hover:bg-red-700 hover:text-white"
             >

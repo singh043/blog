@@ -283,7 +283,7 @@ export default function DashProfile() {
         {showModal && (
           <DeletePopup
             setShowModal={setShowModal}
-            handleDeleteUser={handleDeleteUser}
+            handleDelete={handleDeleteUser}
           />
         )}
       </div>
