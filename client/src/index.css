@@ -83,3 +83,10 @@ select {
 .dark .post-content a{
     color: red;
 }
+
+/* .line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+} */
