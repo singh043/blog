@@ -22,7 +22,7 @@ const DashComments = () => {
                     }
                 }
             } catch (error) {
-                console.log(error);
+                console.log(error.message);
             }
         }
         if(currentUser.isAdmin) {
