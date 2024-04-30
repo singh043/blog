@@ -90,3 +90,28 @@ select {
     -webkit-box-orient: vertical;  
     overflow: hidden;
 } */
+
+select {
+    appearance: none;
+    outline-width: 2px;
+    outline-color: #5755FE;
+    font: inherit;
+    height: 2.5rem;
+    width: 10rem;
+    padding: 0.5rem 1rem;
+    color: black;
+    border-radius: 6px;
+    cursor: pointer;
+    &::-ms-expand {
+      display: none;
+    }
+    &:focus {
+      outline: none;
+    }
+    option {
+      color: inherit;
+      background-color: var(--option-bg);
+      border-radius: 6px;
+    }
+}
+  

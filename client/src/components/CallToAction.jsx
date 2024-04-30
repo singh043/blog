@@ -10,7 +10,7 @@ const CallToAction = () => {
                     Checkout these resources with 100 Javascript Projects
                 </p>
                 <button className="rounded-tl-xl rounded-bl-none border-none outline-none w-full h-10 font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white">
-                    <a href="https://www.100jsprojects.com" target="_blank" rel="noopener noreferrer">Learn More</a>
+                    <a target="_blank" rel="noopener noreferrer">Learn More</a>
                 </button>
             </div>
             <div className="p-7 flex-1">

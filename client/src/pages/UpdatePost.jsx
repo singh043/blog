@@ -139,17 +139,17 @@ const UpdatePost = () => {
                                 </span>
                             </div>
                             <ul className={`bg-white mt-1 min-w-[180px] overflow-y-auto rounded-md ${open ? "max-h-60 border-2 border-black/40" : "max-h-0"}`}>
-                                <li className={`py-2 px-4 w-full bg-gray-100 ${ selectedOption === "Javascript" ? "bg-teal-500  text-white" : "cursor-pointer" }`} 
+                                <li className={`py-2 px-4 w-full bg-gray-100 ${ selectedOption === "javascript" ? "bg-teal-500  text-white" : "cursor-pointer" }`} 
                                     onClick={() => { 
-                                        if(selectedOption === null || selectedOption !== "Javascript"){
-                                            setSelectedOption("Javascript")
-                                            setFormData({...formData, category: "Javascript"})
+                                        if(selectedOption === null || selectedOption !== "javascript"){
+                                            setSelectedOption("javascript")
+                                            setFormData({...formData, category: "javascript"})
                                         }
                                     }}
                                 >
                                     <div className="flex justify-between items-center">
-                                        <span>Javascript</span>
-                                        <VscChromeClose size={16} className={`${selectedOption === "Javascript" ? "inline-block cursor-pointer" : "hidden"}`}
+                                        <span>javascript</span>
+                                        <VscChromeClose size={16} className={`${selectedOption === "javascript" ? "inline-block cursor-pointer" : "hidden"}`}
                                             onClick={() => {
                                                 setSelectedOption(null)
                                                 setFormData({...formData, category: ''})
@@ -157,17 +157,17 @@ const UpdatePost = () => {
                                         />
                                     </div>
                                 </li>
-                                <li className={`py-2 px-4 w-full bg-gray-100 ${ selectedOption === "Reactjs" ? " bg-teal-500  text-white" : "cursor-pointer" }`} 
+                                <li className={`py-2 px-4 w-full bg-gray-100 ${ selectedOption === "reactjs" ? " bg-teal-500  text-white" : "cursor-pointer" }`} 
                                     onClick={() => { 
-                                        if(selectedOption === null || selectedOption !== "Reactjs"){
-                                            setSelectedOption("Reactjs")
-                                            setFormData({...formData, category: "Reactjs"})
+                                        if(selectedOption === null || selectedOption !== "reactjs"){
+                                            setSelectedOption("reactjs")
+                                            setFormData({...formData, category: "reactjs"})
                                         }
                                     }}
                                 >
                                     <div className="flex justify-between items-center">
-                                        <span>Reactjs</span>
-                                        <VscChromeClose size={16} className={`${selectedOption === "Reactjs" ? "inline-block cursor-pointer" : "hidden"}`}
+                                        <span>reactjs</span>
+                                        <VscChromeClose size={16} className={`${selectedOption === "reactjs" ? "inline-block cursor-pointer" : "hidden"}`}
                                             onClick={() => {
                                                 setSelectedOption(null)
                                                 setFormData({...formData, category: ''})
@@ -175,17 +175,17 @@ const UpdatePost = () => {
                                         />
                                     </div>
                                 </li>
-                                <li className={`py-2 px-4 w-full bg-gray-100 ${ selectedOption === "Nextjs" ? " bg-teal-500  text-white" : "cursor-pointer" }`} 
+                                <li className={`py-2 px-4 w-full bg-gray-100 ${ selectedOption === "nextjs" ? " bg-teal-500  text-white" : "cursor-pointer" }`} 
                                     onClick={() => { 
-                                        if(selectedOption === null || selectedOption !== "Nextjs"){
-                                            setSelectedOption("Nextjs")
-                                            setFormData({...formData, category: "Nextjs"})
+                                        if(selectedOption === null || selectedOption !== "nextjs"){
+                                            setSelectedOption("nextjs")
+                                            setFormData({...formData, category: "nextjs"})
                                         }
                                     }}
                                 >
                                     <div className="flex justify-between items-center">
-                                        <span>Nextjs</span>
-                                        <VscChromeClose size={16} className={`${selectedOption === "Nextjs" ? "inline-block cursor-pointer" : "hidden"}`}
+                                        <span>nextjs</span>
+                                        <VscChromeClose size={16} className={`${selectedOption === "nextjs" ? "inline-block cursor-pointer" : "hidden"}`}
                                             onClick={() => {
                                                 setSelectedOption(null)
                                                 setFormData({...formData, category: ''})

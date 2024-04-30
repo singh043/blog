@@ -1,9 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import { AiOutlineSearch } from "react-icons/ai";
 import { BsMoonStarsFill, BsSunFill } from "react-icons/bs";
 import { SlMenu } from "react-icons/sl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { VscChromeClose } from "react-icons/vsc";
 import { useSelector, useDispatch } from "react-redux";
 import Avatar from "./Avatar";
@@ -12,12 +12,26 @@ import ClickAwayListener from "react-click-away-listener";
 // import { toggleTheme } from "../redux/theme/themeSlice";
 
 export default function Header() {
+
+  const location = useLocation();
+  const navigate = useNavigate()
   const path = useLocation().pathname;
   const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState('');
   const { theme } = useSelector((state) => state.theme);
   const { currentUser } = useSelector((state) => state.user);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    } else {
+      setSearchTerm('')
+    }
+  }, [location.search])
 
   const handleSignOut = async () => {
     try {
@@ -35,6 +49,14 @@ export default function Header() {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('searchTerm', searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  }
+
   return (
     <nav
       className=" flex items-center justify-between px-[4%] h-20
@@ -47,14 +69,15 @@ export default function Header() {
       >
         <span className="pl-2 text-teal-500 ">Flick&apos;s Blog</span>
       </Link>
-      <form onSubmit={() => {}}>
+      <form onSubmit={handleSubmit}>
         <div className="relative hidden lg:flex">
           <input
             type="text"
             placeholder="Search..."
             spellCheck={false}
-            onChange={() => {}}
-            className=" w-[230px] h-10 outline-blue-700 textsm rounded-md px-3 py-4 border-2 
+            onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
+            className="w-[230px] h-10 outline-blue-700 textsm rounded-md px-3 py-4 border-2 
                     border-black/60 text-gray-700"
           />
           <AiOutlineSearch
