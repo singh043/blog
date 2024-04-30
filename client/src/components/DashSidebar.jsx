@@ -38,7 +38,7 @@ export default function DashSidebar() {
       {
         currentUser && currentUser.isAdmin && (
           <Link to='/dashboard?tab=dashboard' className={`flex relative gap-3 items-center p-2 rounded-lg h-11 ${
-              tab === "comments" || !tab ? "bg-black/5 text-black" : "hover:bg-black/5"
+              (tab === "dashboard" || !tab) ? "bg-black/5 text-black" : "hover:bg-black/5"
             } `}>
             <HiChartPie size={24} />
             <span>Dashboard</span>
