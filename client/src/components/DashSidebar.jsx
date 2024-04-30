@@ -3,7 +3,7 @@ import { FaUsers } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutSuccess } from "../redux/user/userSlice";
-import { HiArrowSmRight, HiUser, HiDocumentText } from "react-icons/hi";
+import { HiArrowSmRight, HiUser, HiDocumentText, HiAnnotation } from "react-icons/hi";
 
 export default function DashSidebar() {
   const location = useLocation();
@@ -64,6 +64,12 @@ export default function DashSidebar() {
               } `}>
               <HiDocumentText size={26} />
               <span>Posts</span>
+            </Link>
+            <Link to='/dashboard?tab=comments' className={`flex relative gap-3 items-center p-2 rounded-lg h-11 ${
+                tab === "comments" ? "bg-black/5 text-black" : "hover:bg-black/5"
+              } `}>
+              <HiAnnotation size={26} />
+              <span>Comments</span>
             </Link>
           </>
         )
