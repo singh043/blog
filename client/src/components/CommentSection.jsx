@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import Comment from './Comment';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -105,8 +104,9 @@ const CommentSection = ({ postId }) => {
             });
 
             if(res.ok) {
-                const data = await res.json();
+                setComments(comments.filter((comment) => comment._id !== commentId));
             }
+            
         } catch (error) {
             console.log(error.message);
         }

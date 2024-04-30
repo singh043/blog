@@ -8,9 +8,10 @@ const DashUsers = () => {
     const [users, setUsers] = useState([]);
     const [showMore, setShowMore] = useState(true);
     const [showModal, setShowModal] = useState(false);
-    const [userIdToDelete, setUserIdToDelete] = useState(null);
+    const [userIdToDelete, setUserIdToDelete] = useState('');
     const { currentUser } = useSelector((state) => state.user);
 
+    console.log(userIdToDelete)
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -18,7 +19,7 @@ const DashUsers = () => {
                 const data = await res.json();
                 if (res.ok) {
                     setUsers(data.users);
-                    if(data.users.length < 9) {
+                    if(data.users.length <= 9) {
                         setShowMore(false);
                     }
                 }
@@ -39,7 +40,7 @@ const DashUsers = () => {
             const data = await res.json();
             if(res.ok) {
                 setUsers((prev) => [...prev, ...data.users])
-                if(data.users.length < 9){
+                if(data.users.length <= 9){
                     setShowMore(false);
                 }
             }
@@ -49,22 +50,21 @@ const DashUsers = () => {
     }
 
     const handleDeleteUser = async () => {
-        setShowModal(false);
         try {
-            const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-              method: "DELETE",
+            const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+                method: 'DELETE',
             });
             const data = await res.json();
             if (res.ok) {
-              setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
-              setShowModal(false);
+                setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+                setShowModal(false);
             } else {
-              console.log(data);
+                console.log(data.message);
             }
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
-    }
+    };
 
     return (
         <div className="overflow-auto md:mx-auto p-3 w-full">
@@ -145,7 +145,7 @@ const DashUsers = () => {
                         <DeletePopup
                             setShowModal={setShowModal}
                             title="Are you sure, you want to delete this user?"
-                            handleDeleteUser={handleDeleteUser}
+                            handleDelete={handleDeleteUser}
                         />
                     )}
                 </>
