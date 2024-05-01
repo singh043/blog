@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node api/index.js",
     "start": "node api/index.js",
-    "build": "npm install && npm install --prefix client && npm run build --prefix client"
+    "build": "npm install bcryptjs && npm install cookie-parser && npm install dotenv && npm install express && npm install jsonwebtoken && npm install mongoose && npm install uuid && npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
   "author": "",
